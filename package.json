@@ -1,0 +1,18 @@
+{
+  "name": "goo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/*.html",
+    "build": "parcel build src/*.html",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "cssnano": "^5.0.2"
+  },
+  "dependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
