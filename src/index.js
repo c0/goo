@@ -2,7 +2,7 @@ const BLOB_COLOR = '#000'
 const DECAY = 0.1
 const VELOCITY = 1 // >= 1
 
-const LINKS = 2
+const LINKS = 3
 
 class Ball {
   constructor(x, y) {

@@ -7,9 +7,10 @@ class Ball {
     this.x = x
     this.y = y
     this.angle = Math.PI * 2 * Math.random()
-    this.vx = (VELOCITY + Math.random() * (1 - VELOCITY)) * Math.cos(this.angle)
+    this.vx =
+      (VELOCITY / 4 + Math.random() * (1 - VELOCITY)) * Math.cos(this.angle)
     this.vy = VELOCITY + Math.random() * (1 - VELOCITY)
-    this.r = 12 + 3 * Math.random()
+    this.r = 16 + 5 * Math.random()
   }
 
   update() {
@@ -23,44 +24,25 @@ const randBetween = (low, high) => {
   return Math.random() * (high - low) + low
 }
 
-const GOOP_Y_OFFSET = 50
+const GOOP_X_OFFSET = 50
 
 class GoopLine {
-  constructor(y, thickness, droop) {
-    this.ly = y + GOOP_Y_OFFSET * Math.random() - GOOP_Y_OFFSET
-    this.ry = y + GOOP_Y_OFFSET * Math.random() - GOOP_Y_OFFSET
+  constructor(x, thickness) {
+    this.lx = x + GOOP_X_OFFSET * Math.random() - GOOP_X_OFFSET
+    this.rx = x + GOOP_X_OFFSET * Math.random() - GOOP_X_OFFSET
 
     this.thickness = thickness
-    this.droop = droop
     this.r = width
   }
 
   update(lp, rp, percentage) {
-    const mp = {
-      x: (lp.x + rp.x) / 2,
-      y: Math.max(
-        (this.ly + this.ry) / 2,
-        (this.ly + this.ry) / 2 + (1 - percentage) * this.droop - GOOP_Y_OFFSET
-      ),
-    }
     const t = this.thickness
     ctx.beginPath()
-    ctx.moveTo(lp.x, this.ly)
-    ctx.arcTo(mp.x, mp.y, rp.x, this.ry, this.r * (1 - percentage))
-    ctx.lineTo(rp.x, this.ry) // Finishes the line
-    ctx.lineTo(rp.x, this.ry + t)
-
-    ctx.arcTo(
-      mp.x,
-      mp.y + t,
-      lp.x,
-      this.ly + t,
-      this.r * 1.25 * (1 - percentage)
-    )
-
-    ctx.lineTo(lp.x, this.ly + t)
+    ctx.moveTo(this.lx, lp.y)
+    ctx.lineTo(this.rx, rp.y) // Finishes the line
+    ctx.lineTo(this.rx + t, rp.y)
+    ctx.lineTo(this.lx + t, lp.y)
     ctx.fill()
-    ctx.stroke()
   }
 }
 
@@ -77,18 +59,17 @@ let count = 0
 let randomCount = 1
 
 let goopLines = []
-const GOOP_LINE_COUNT = Math.floor(height / 150)
+const GOOP_LINE_COUNT = Math.floor(width / 100)
 
 for (let i = 0; i < GOOP_LINE_COUNT; i++) {
   goopLines.push(
     new GoopLine(
-      i * (height / GOOP_LINE_COUNT) + (50 * Math.random() - 50),
-      randBetween(30, 50),
-      randBetween(100, 300)
+      i * (width / GOOP_LINE_COUNT) + (50 * Math.random() - 50),
+      randBetween(5, 50)
     )
   )
 }
-let ballMakerSpeed = 10
+let ballMakerSpeed = 50
 const BALL_MAKER_EDGE = 50
 
 function loop() {
@@ -98,19 +79,19 @@ function loop() {
 
   goopLines.forEach((goopLine) => {
     goopLine.update(
-      { x: width * halfPercentage },
-      { x: width * (1 - halfPercentage) },
+      { y: height * halfPercentage },
+      { y: height * (1 - halfPercentage) },
       halfPercentage * 2
     )
   })
 
   // Side Walls
-  ctx.fillRect(0, 0, width * halfPercentage + 30, height)
+  ctx.fillRect(0, 0, width, height * halfPercentage + 30)
   ctx.fillRect(
-    width * (1 - halfPercentage) - 30,
     0,
-    width * halfPercentage + 30,
-    height
+    height * (1 - halfPercentage) - 30,
+    width,
+    height * halfPercentage + 30
   )
 
   // Create a new ball

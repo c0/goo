@@ -26,7 +26,8 @@ a:hover {
 }
 
 a.one,
-a.two {
+a.two,
+a.three {
   position: absolute;
   z-index: 1;
   top: 50%;
@@ -40,9 +41,13 @@ a.two {
 }
 
 a.one {
-  left: 33.33%;
+  left: 25%;
 }
 
 a.two {
-  left: 66.66%;
+  left: 50%;
+}
+
+a.three {
+  left: 75%;
 }
